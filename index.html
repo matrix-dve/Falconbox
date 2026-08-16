@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="doc-title">Сжатие Фото | QR Генератор | PDF Конвертер - МультиИнструмент Про</title>
+
+    <!-- SEO Meta Tags for Yandex & Search Engines -->
+    <meta name="description" content="МультиИнструмент Про — универсальный бесплатный онлайн-сервис для сжатия изображений (JPG, PNG) с регулировкой качества, быстрой генерации QR-кодов из текста и изображений, конвертации текстовых файлов и фото в PDF-документы, с сохранением истории и поддержкой многоязычности.">
+    <meta name="keywords" content="сжатие фото, уменьшить размер фото, генератор QR кода, сделать QR код из фото, конвертер в PDF, онлайн инструменты, мультиинструмент">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph Tags for Social Media & Yandex Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Сжатие Фото | QR Генератор | PDF Конвертер - МультиИнструмент Про">
+    <meta property="og:description" content="Мощный онлайн-инструмент для сжатия изображений, генерации QR-кодов и создания PDF-документов. Быстро, бесплатно и без потери качества!">
+    <meta property="og:image" content="https://i.ibb.co/9HNtDprm/20260816-182414.png">
+    <meta property="og:image:secure_url" content="https://i.ibb.co/9HNtDprm/20260816-182414.png">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Schema.org Structured Data for Yandex Rich Indexing -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "МультиИнструмент Про",
+      "description": "Многофункциональный веб-сервис: сжатие фото и картинок, создание QR-кодов из текста и изображений, генерация PDF-файлов, сохранение истории и выбор языка.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "image": "https://i.ibb.co/9HNtDprm/20260816-182414.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- QRCode Lib & jsPDF Lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #000000;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Header */
+        header {
+            width: 100%;
+            height: 65px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 50%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-install {
+            background: #000000;
+            color: #ffffff !important;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .icon-btn svg {
+            width: 26px;
+            height: 26px;
+            fill: #000000;
+        }
+
+        /* Adsterra Top Container (728x90) */
+        .ad-banner-wrapper-top {
+            margin-top: 75px;
+            width: 100%;
+            max-width: 728px;
+            min-height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: rgba(0,0,0,0.02);
+            border-radius: 8px;
+        }
+
+        /* Adsterra Middle Container (300x250) */
+        .ad-banner-wrapper-mid {
+            margin: 15px 0;
+            width: 100%;
+            max-width: 300px;
+            min-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: rgba(0,0,0,0.02);
+            border-radius: 8px;
+        }
+
+        .ad-banner-wrapper-top iframe, .ad-banner-wrapper-mid iframe {
+            border: none;
+            overflow: hidden;
+        }
+
+        /* Main Glassmorphism Container */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            width: 95%;
+            max-width: 650px;
+            margin-top: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .glass-card > div {
+            width: 100%;
+        }
+
+        /* Sidebar Drawer */
+        .sidebar, .settings-modal {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar { right: -300px; width: 300px; }
+        .sidebar.active { right: 0; }
+        .settings-modal { right: -320px; width: 300px; }
+        .settings-modal.active { right: 0; }
+
+        .close-btn { align-self: flex-end; background: none; border: none; cursor: pointer; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Buttons & Forms */
+        button.btn-main {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button.btn-green {
+            background-color: #28a745 !important;
+            color: #ffffff !important;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        input[type="file"], input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #000000;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #555;
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #ccc;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .slider-container { margin: 15px 0; }
+        input[type="range"] { width: 100%; accent-color: #000000; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Preview Area */
+        .image-card, .history-item {
+            margin-top: 15px;
+            border: 1px dashed #000;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            word-break: break-all;
+        }
+
+        .image-card img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        .download-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .download-group input { margin: 0; flex: 2; }
+        .download-group select { margin: 0; flex: 1; }
+
+        .qr-bg-container {
+            position: relative;
+            padding: 20px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .qr-overlay-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+        .overlay.active { display: block; }
+
+        @media (max-width: 450px) {
+            #txt-install { display: none; }
+            .btn-install { padding: 8px; }
+            .logo { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo" id="txt-logo">МультиИнструмент Про</div>
+        <div class="header-actions">
+            <button class="btn-install" id="btn-install-app" onclick="installApp()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <span id="txt-install">Установить</span>
+            </button>
+            <button class="icon-btn" onclick="toggleSettings()" aria-label="Settings">
+                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </button>
+            <button class="icon-btn" onclick="toggleMenu()" aria-label="Menu">
+                <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- First Adsterra Unit (728x90) -->
+    <div class="ad-banner-wrapper-top">
+        <iframe id="adFrameTop" width="728" height="90" frameborder="0" scrolling="no"></iframe>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
+
+    <!-- Sidebar Navigation Drawer -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#000"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <div class="nav-item" onclick="switchTab('compressor')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4H1v-2h22v2h-2zM12 3l5 5h-3v4h-4V8H7l5-5z"/></svg>
+            <span id="menu-compressor">Сжатие изображений</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('qr')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm13-2h3v2h-3zm-3 2h2v3h-2zm2 3h3v3h-3zm-4 1h2v2h-2z"/></svg>
+            <span id="menu-qr">Генератор QR-кода</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('pdf')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/></svg>
+            <span id="menu-pdf">Генератор PDF</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('history')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 1 1 7 7 7.07 7.07 0 0 1-6-3.4L5.56 17A8.96 8.96 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+            <span id="menu-history">История</span>
+        </div>
+    </div>
+
+    <!-- Settings Drawer -->
+    <div class="settings-modal" id="settings-modal">
+        <button class="close-btn" onclick="toggleSettings()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#000"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <h3 id="txt-settings-title">Настройки</h3>
+        <div>
+            <label id="txt-lang-label" for="langSelect" style="font-weight:bold;">Язык / Language / भाषा:</label>
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="ru" selected>Русский (Russian)</option>
+                <option value="en">English (International)</option>
+                <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="glass-card">
+        
+        <!-- Image Compressor Section -->
+        <div id="compressor" class="tab-content active">
+            <h2 id="txt-comp-heading">Сжатие изображений</h2>
+            <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(this)">
+            
+            <div id="originalCard" class="image-card" style="display:none;">
+                <strong id="txt-orig-title">Оригинальное изображение</strong>
+                <p id="origSizeInfo" style="font-weight:bold; color:#555;"></p>
+                <img id="originalImg" src="" alt="Original">
+            </div>
+
+            <div class="slider-container">
+                <label id="txt-quality-label">Качество сжатия: <span id="qualityVal">50</span>%</label>
+                <input type="range" id="qualitySlider" min="5" max="95" value="50" oninput="updateQualityVal(this.value)">
+            </div>
+
+            <div id="compressedCard" class="image-card" style="display:none;">
+                <strong id="txt-comp-title">Сжатое изображение</strong>
+                <p id="compSizeInfo" style="font-weight:bold; color:#28a745;"></p>
+                <img id="compressedImg" src="" alt="Compressed">
+                
+                <div class="download-group">
+                    <input type="text" id="downloadFileName" placeholder="имя_файла">
+                    <select id="downloadFormat" onchange="compressImage()">
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/png">PNG</option>
+                    </select>
+                </div>
+                <button class="btn-main" id="btn-download" onclick="downloadCompressedImage()">Скачать</button>
+                <button class="btn-green" id="btn-gen-qr-comp" onclick="triggerQrFromComp()">Создать QR-код</button>
+            </div>
+        </div>
+
+        <!-- QR Code Generator Section -->
+        <div id="qr" class="tab-content">
+            <h2 id="txt-qr-heading">Генератор QR-кода</h2>
+            
+            <input type="text" id="qrInput" placeholder="Введите текст или URL">
+            <div class="divider" id="txt-or">ИЛИ</div>
+            
+            <label id="txt-qr-img-label" style="font-weight:bold; font-size:0.9rem;">Загрузите изображение из хранилища:</label>
+            <input type="file" id="qrImageUpload" accept="image/*" onchange="handleQrImageUpload(this)">
+
+            <button class="btn-main" id="btn-gen-qr" onclick="generateQR()">Сгенерировать QR-код</button>
+
+            <div id="qrResult" class="image-card" style="display:none;">
+                <div id="qrBgBox" class="qr-bg-container">
+                    <div class="qr-overlay-card">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+                <button class="btn-main" id="btn-download-qr" onclick="downloadQRCode()" style="margin-top:15px;">Скачать QR-код</button>
+            </div>
+        </div>
+
+        <!-- PDF Generator Section -->
+        <div id="pdf" class="tab-content">
+            <h2 id="txt-pdf-heading">Генератор PDF</h2>
+            <textarea id="pdfText" rows="4" placeholder="Введите текст для PDF..."></textarea>
+            
+            <div class="divider" id="txt-or-pdf">ИЛИ</div>
+            
+            <label id="txt-pdf-img-label" style="font-weight:bold; font-size:0.9rem;">Изображение в PDF:</label>
+            <input type="file" id="pdfImageUpload" accept="image/*" multiple>
+
+            <button class="btn-main" id="btn-gen-pdf" onclick="generatePDF()">Скачать PDF</button>
+        </div>
+
+        <!-- History Section -->
+        <div id="history" class="tab-content">
+            <h2 id="txt-history-heading">История операций</h2>
+            <button class="btn-main" id="btn-clear-history" onclick="clearHistory()" style="background:#d9534f; margin-bottom:15px;">Очистить историю</button>
+            <div id="historyList"></div>
+        </div>
+
+        <!-- Second Adsterra Unit (300x250) Integrated Inside Container -->
+        <div class="ad-banner-wrapper-mid">
+            <iframe id="adFrameMid" width="300" height="250" frameborder="0" scrolling="no"></iframe>
+        </div>
+
+    </div>
+
+    <script>
+        // Load Adsterra in Isolated Sandboxed IFrames to prevent UI freeze
+        window.onload = function() {
+            // Render Top Ad (728x90)
+            const adDocTop = document.getElementById('adFrameTop').contentWindow.document;
+            adDocTop.open();
+            adDocTop.write(`
+                <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">
+                    <script>
+                      atOptions = {
+                        'key' : '70579eed11ce827aa60736310f6b2387',
+                        'format' : 'iframe',
+                        'height' : 90,
+                        'width' : 728,
+                        'params' : {}
+                      };
+                    <\/script>
+                    <script src="https://www.highperformanceformat.com/70579eed11ce827aa60736310f6b2387/invoke.js"><\/script>
+                </body>
+            `);
+            adDocTop.close();
+
+            // Render Middle Ad (300x250)
+            const adDocMid = document.getElementById('adFrameMid').contentWindow.document;
+            adDocMid.open();
+            adDocMid.write(`
+                <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">
+                    <script>
+                      atOptions = {
+                        'key' : '382be5c3d01f2b104733a8302e357aa1',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                      };
+                    <\/script>
+                    <script src="https://www.highperformanceformat.com/382be5c3d01f2b104733a8302e357aa1/invoke.js"><\/script>
+                </body>
+            `);
+            adDocMid.close();
+        };
+
+        const translations = {
+            ru: {
+                title: "МультиИнструмент Про",
+                logo: "МультиИнструмент Про",
+                install: "Установить",
+                menuComp: "Сжатие изображений",
+                menuQr: "Генератор QR",
+                menuPdf: "Генератор PDF",
+                menuHistory: "История",
+                settingsTitle: "Настройки",
+                langLabel: "Язык:",
+                compHeading: "Сжатие изображений",
+                origTitle: "Оригинальное изображение",
+                compTitle: "Сжатое изображение",
+                qualityLabel: "Качество сжатия: ",
+                btnDownload: "Скачать",
+                btnGenQrComp: "Создать QR-код",
+                qrHeading: "Генератор QR-кода",
+                qrPlaceholder: "Введите текст или URL",
+                qrImgLabel: "Загрузите изображение из хранилища:",
+                txtOr: "ИЛИ",
+                btnGenQr: "Сгенерировать QR-код",
+                btnDownloadQr: "Скачать QR-код",
+                pdfHeading: "Генератор PDF",
+                pdfPlaceholder: "Введите текст для PDF...",
+                pdfImgLabel: "Изображение в PDF:",
+                btnGenPdf: "Скачать PDF",
+                historyHeading: "История",
+                btnClearHistory: "Очистить историю",
+                errNoQrData: "Введите текст или выберите изображение!",
+                sizeTxt: "Размер: ",
+                emptyHistory: "История пуста",
+                imgLoadedTxt: "[Изображение готово для QR]"
+            },
+            en: {
+                title: "MultiTool Pro",
+                logo: "MultiTool Pro",
+                install: "Install",
+                menuComp: "Image Compressor",
+                menuQr: "QR Generator",
+                menuPdf: "PDF Generator",
+                menuHistory: "History",
+                settingsTitle: "Settings",
+                langLabel: "Language:",
+                compHeading: "Custom Image Compression",
+                origTitle: "Original Image",
+                compTitle: "Compressed Image",
+                qualityLabel: "Quality: ",
+                btnDownload: "Download",
+                btnGenQrComp: "Generate QR Code",
+                qrHeading: "QR Code Generator",
+                qrPlaceholder: "Enter text or URL",
+                qrImgLabel: "Upload Image from Local Storage:",
+                txtOr: "OR",
+                btnGenQr: "Generate QR Code",
+                btnDownloadQr: "Download QR Code",
+                pdfHeading: "PDF Generator",
+                pdfPlaceholder: "Enter text for PDF...",
+                pdfImgLabel: "Images to PDF:",
+                btnGenPdf: "Download PDF",
+                historyHeading: "History",
+                btnClearHistory: "Clear History",
+                errNoQrData: "Enter text or select an image!",
+                sizeTxt: "Size: ",
+                emptyHistory: "History is empty",
+                imgLoadedTxt: "[Image Ready for QR]"
+            },
+            hi: {
+                title: "मल्टीटूल प्रो",
+                logo: "मल्टीटूल प्रो",
+                install: "इंस्टॉल करें",
+                menuComp: "इमेज कंप्रेसर",
+                menuQr: "क्यूआर जनरेटर",
+                menuPdf: "पीडीएफ जनरेटर",
+                menuHistory: "हिस्ट्री",
+                settingsTitle: "सेटिंग्स",
+                langLabel: "भाषा:",
+                compHeading: "कस्टम इमेज कंप्रेसर",
+                origTitle: "मूल इमेज",
+                compTitle: "कंप्रेस इमेज",
+                qualityLabel: "क्वालिटी: ",
+                btnDownload: "डाउनलोड करें",
+                btnGenQrComp: "क्यूआर कोड बनाएं",
+                qrHeading: "क्यूआर जनरेटर",
+                qrPlaceholder: "टेक्स्ट या URL दर्ज करें",
+                qrImgLabel: "लोकल स्टोरेज से इमेज अपलोड करें:",
+                txtOr: "या",
+                btnGenQr: "क्यूआर जनरेट करें",
+                btnDownloadQr: "क्यूआर कोड डाउनलोड करें",
+                pdfHeading: "पीडीएफ जनरेटर",
+                pdfPlaceholder: "पीडीएफ के लिए टेक्स्ट लिखें...",
+                pdfImgLabel: "इमेज से पीडीएफ बनाएं:",
+                btnGenPdf: "पीडीएफ डाउनलोड करें",
+                historyHeading: "हिस्ट्री",
+                btnClearHistory: "हिस्ट्री साफ करें",
+                errNoQrData: "टेक्स्ट दर्ज करें या इमेज चुनें!",
+                sizeTxt: "साइज: ",
+                emptyHistory: "हिस्ट्री खाली है",
+                imgLoadedTxt: "[इमेज QR के लिए तैयार है]"
+            }
+        };
+
+        let currentLang = 'ru';
+        let originalImageObject = null;
+        let currentCompressedData = null;
+        let currentCompressedSizeKB = 0;
+        let qrImageDataUrl = null;
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.title = t.title;
+            document.getElementById('txt-logo').innerText = t.logo;
+            document.getElementById('txt-install').innerText = t.install;
+            document.getElementById('menu-compressor').innerText = t.menuComp;
+            document.getElementById('menu-qr').innerText = t.menuQr;
+            document.getElementById('menu-pdf').innerText = t.menuPdf;
+            document.getElementById('menu-history').innerText = t.menuHistory;
+            document.getElementById('txt-settings-title').innerText = t.settingsTitle;
+            document.getElementById('txt-lang-label').innerText = t.langLabel;
+            
+            document.getElementById('txt-comp-heading').innerText = t.compHeading;
+            document.getElementById('txt-orig-title').innerText = t.origTitle;
+            document.getElementById('txt-comp-title').innerText = t.compTitle;
+            document.getElementById('txt-quality-label').childNodes[0].nodeValue = t.qualityLabel;
+            document.getElementById('btn-download').innerText = t.btnDownload;
+            document.getElementById('btn-gen-qr-comp').innerText = t.btnGenQrComp;
+            
+            document.getElementById('txt-qr-heading').innerText = t.qrHeading;
+            document.getElementById('qrInput').placeholder = t.qrPlaceholder;
+            document.getElementById('txt-or').innerText = t.txtOr;
+            document.getElementById('txt-qr-img-label').innerText = t.qrImgLabel;
+            document.getElementById('btn-gen-qr').innerText = t.btnGenQr;
+            document.getElementById('btn-download-qr').innerText = t.btnDownloadQr;
+            
+            document.getElementById('txt-pdf-heading').innerText = t.pdfHeading;
+            document.getElementById('pdfText').placeholder = t.pdfPlaceholder;
+            document.getElementById('txt-or-pdf').innerText = t.txtOr;
+            document.getElementById('txt-pdf-img-label').innerText = t.pdfImgLabel;
+            document.getElementById('btn-gen-pdf').innerText = t.btnGenPdf;
+            
+            document.getElementById('txt-history-heading').innerText = t.historyHeading;
+            document.getElementById('btn-clear-history').innerText = t.btnClearHistory;
+
+            if(document.getElementById('history').classList.contains('active')) loadHistory();
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+            document.getElementById('settings-modal').classList.remove('active');
+        }
+
+        function toggleSettings() {
+            document.getElementById('settings-modal').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+            document.getElementById('sidebar').classList.remove('active');
+        }
+
+        function closeAllPanels() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('settings-modal').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            closeAllPanels();
+            if(tabId === 'history') loadHistory();
+        }
+
+        function installApp() {
+            alert('App Installation Started!');
+        }
+
+        /* Image Compression Logic */
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            const t = translations[currentLang];
+            if (!file) return;
+
+            const origSizeKB = (file.size / 1024).toFixed(2);
+            document.getElementById('origSizeInfo').innerText = `${t.sizeTxt}${origSizeKB} KB`;
+            document.getElementById('downloadFileName').value = file.name.split('.')[0] + '_compressed';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                originalImageObject = new Image();
+                originalImageObject.src = e.target.result;
+                originalImageObject.onload = function() {
+                    document.getElementById('originalImg').src = e.target.result;
+                    document.getElementById('originalCard').style.display = 'block';
+                    compressImage();
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateQualityVal(val) {
+            document.getElementById('qualityVal').innerText = val;
+            if (originalImageObject) compressImage();
+        }
+
+        function compressImage() {
+            if (!originalImageObject) return;
+            const t = translations[currentLang];
+            const quality = parseInt(document.getElementById('qualitySlider').value) / 100;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = originalImageObject.width;
+            canvas.height = originalImageObject.height;
+            ctx.drawImage(originalImageObject, 0, 0);
+
+            const format = document.getElementById('downloadFormat').value;
+            const dataUrl = canvas.toDataURL(format, quality);
+            
+            const head = format === 'image/png' ? 'data:image/png;base64,' : 'data:image/jpeg;base64,';
+            const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+            currentCompressedSizeKB = (sizeInBytes / 1024).toFixed(2);
+            currentCompressedData = dataUrl;
+
+            document.getElementById('compressedImg').src = dataUrl;
+            document.getElementById('compSizeInfo').innerText = `${t.sizeTxt}${currentCompressedSizeKB} KB`;
+            document.getElementById('compressedCard').style.display = 'block';
+        }
+
+        function downloadCompressedImage() {
+            if (!currentCompressedData) return;
+            const fileName = document.getElementById('downloadFileName').value || 'image';
+            const formatSelect = document.getElementById('downloadFormat').value;
+            const ext = formatSelect === 'image/png' ? '.png' : '.jpg';
+
+            const link = document.createElement('a');
+            link.href = currentCompressedData;
+            link.download = fileName + ext;
+            link.click();
+
+            const t = translations[currentLang];
+            saveToHistory({ type: t.compHeading, data: currentCompressedData, size: currentCompressedSizeKB + ' KB' });
+        }
+
+        /* Image Optimization for QR Storage */
+        function optimizeForQR(dataUrl, callback) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 40;
+                canvas.height = 40;
+                ctx.drawImage(img, 0, 0, 40, 40);
+                callback(canvas.toDataURL('image/jpeg', 0.2));
+            };
+            img.src = dataUrl;
+        }
+
+        function handleQrImageUpload(input) {
+            const file = input.files[0];
+            const t = translations[currentLang];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                optimizeForQR(e.target.result, function(optimizedData) {
+                    qrImageDataUrl = optimizedData;
+                    document.getElementById('qrInput').value = t.imgLoadedTxt;
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function triggerQrFromComp() {
+            const t = translations[currentLang];
+            switchTab('qr');
+            document.getElementById('qrInput').value = t.imgLoadedTxt;
+            optimizeForQR(currentCompressedData, function(optimizedData) {
+                qrImageDataUrl = optimizedData;
+                generateQR();
+            });
+        }
+
+        /* QR Generator */
+        function generateQR() {
+            const textInput = document.getElementById('qrInput').value;
+            const qrContainer = document.getElementById('qrcode');
+            const qrResult = document.getElementById('qrResult');
+            const qrBgBox = document.getElementById('qrBgBox');
+            const t = translations[currentLang];
+            qrContainer.innerHTML = '';
+
+            let finalData = "";
+            let isImageMode = false;
+
+            if (textInput === t.imgLoadedTxt && qrImageDataUrl) {
+                finalData = qrImageDataUrl;
+                isImageMode = true;
+                qrBgBox.style.backgroundImage = `url('${qrImageDataUrl}')`;
+            } else if (textInput) {
+                finalData = textInput;
+                qrBgBox.style.backgroundImage = `none`;
+                qrBgBox.style.background = `rgba(0,0,0,0.05)`;
+            } else {
+                alert(t.errNoQrData);
+                return;
+            }
+
+            new QRCode(qrContainer, {
+                text: finalData,
+                width: 160,
+                height: 160,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+            
+            qrResult.style.display = 'block';
+            
+            const historyObj = { type: t.qrHeading };
+            if(isImageMode) {
+                historyObj.data = finalData;
+                historyObj.size = "Image QR Code";
+            } else {
+                historyObj.text = finalData.substring(0, 30) + '...';
+            }
+            saveToHistory(historyObj);
+        }
+
+        /* Download QR Code */
+        function downloadQRCode() {
+            const qrContainer = document.getElementById('qrcode');
+            const img = qrContainer.querySelector('img');
+            const canvas = qrContainer.querySelector('canvas');
+            
+            let downloadUrl = "";
+            if (img && img.src) {
+                downloadUrl = img.src;
+            } else if (canvas) {
+                downloadUrl = canvas.toDataURL('image/png');
+            }
+
+            if (!downloadUrl) return;
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = 'qrcode.png';
+            link.click();
+        }
+
+        /* PDF Generator */
+        async function generatePDF() {
+            const text = document.getElementById('pdfText').value;
+            const imageInput = document.getElementById('pdfImageUpload');
+            const files = imageInput.files;
+            const t = translations[currentLang];
+
+            if (!text && files.length === 0) {
+                alert(t.errNoQrData);
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            if (text) {
+                doc.text(text, 10, 10);
+            }
+
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const dataUrl = await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onload = e => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+
+                    if (text || i > 0) doc.addPage();
+                    doc.addImage(dataUrl, 'JPEG', 15, 15, 180, 160);
+                }
+            }
+
+            doc.save("document.pdf");
+            saveToHistory({ type: t.pdfHeading, text: text ? text.substring(0, 30) + '...' : 'Image PDF' });
+        }
+
+        /* History Storage */
+        function saveToHistory(item) {
+            let history = JSON.parse(localStorage.getItem('app_history') || '[]');
+            item.date = new Date().toLocaleTimeString();
+            history.unshift(item);
+            localStorage.setItem('app_history', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const historyList = document.getElementById('historyList');
+            const t = translations[currentLang];
+            let history = JSON.parse(localStorage.getItem('app_history') || '[]');
+            historyList.innerHTML = '';
+
+            if (history.length === 0) {
+                historyList.innerHTML = `<p>${t.emptyHistory}</p>`;
+                return;
+            }
+
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                if(item.data) {
+                    div.innerHTML = `<strong>[${item.date}] ${item.type}</strong><br><img src="${item.data}"><br>${item.size || ''}`;
+                } else {
+                    div.innerHTML = `<strong>[${item.date}] ${item.type}</strong><br><p>${item.text}</p>`;
+                }
+                historyList.appendChild(div);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('app_history');
+            loadHistory();
+        }
+    </script>
+</body>
+</html>
